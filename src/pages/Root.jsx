@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 
 const Root = () => {
   return (
-    <h1 className="">
+    <div className="w-screen h-screen flex flex-col md:flex-row justify-center items-center">
       <Navbar />
 
       <Outlet />
-    </h1>
+    </div>
   );
 };
 
