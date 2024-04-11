@@ -1,8 +1,16 @@
+import { Fragment } from "react";
+import { useRecoilValue } from "recoil";
+import { conversationState } from "../store/atoms";
+import InitialPage from "../components/InitialPage";
+import CurrentCoversation from "../components/CurrentCoversation";
+
 const NewChat = () => {
+  const conversation = useRecoilValue(conversationState);
+
   return (
-    <div className=" w-full md:w-[84%] h-full bg-gradient-to-r from-[#D7C7F433] to-[#9785BA33]">
-      NewChat
-    </div>
+    <Fragment>
+      {conversation.length === 0 ? <InitialPage /> : <CurrentCoversation />}
+    </Fragment>
   );
 };
 
