@@ -16,6 +16,12 @@ const PromptBar = () => {
   };
 
   const handleSubmit = () => {
+    if (!inputQuestion) {
+      alert("Please add a prompt to continue!");
+
+      return;
+    }
+
     let answer = responseData.filter(
       (res) => res.question.toLowerCase() === inputQuestion.toLowerCase()
     );
@@ -29,6 +35,7 @@ const PromptBar = () => {
 
     const newConversation = {
       id: new Date().getTime(),
+      date: new Date().toISOString().split("T")[0],
       question: inputQuestion,
       response: answer,
     };
@@ -41,8 +48,24 @@ const PromptBar = () => {
   };
 
   const handleSave = () => {
-    const updatedPastConversations = [...pastConversations, conversation];
-    setPastConversations(updatedPastConversations);
+    if (conversation.length === 0) {
+      alert("Please add a prompt to continue!");
+
+      return;
+    } else {
+      const updatedPastConversations = [conversation, ...pastConversations];
+
+      if (updatedPastConversations.length > 0) {
+        // Store the past conversations to local Storage
+        localStorage.setItem(
+          "pastConversations",
+          JSON.stringify(updatedPastConversations)
+        );
+
+        setPastConversations(updatedPastConversations);
+      }
+    }
+
     setConversation([]);
   };
 

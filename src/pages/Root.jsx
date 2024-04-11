@@ -1,16 +1,7 @@
 import Navbar from "../components/Navbar";
 import { Outlet } from "react-router-dom";
-import PromptBar from "../components/PromptBar";
-import { useRecoilValue } from "recoil";
-import { conversationState, pastConversationsState } from "../store/atoms";
 
 const Root = () => {
-  const pastConversations = useRecoilValue(pastConversationsState);
-  const conversation = useRecoilValue(conversationState);
-
-  console.log(pastConversations);
-  console.log(conversation);
-
   return (
     <div className=" w-screen h-screen flex flex-col md:flex-row justify-start items-center">
       <Navbar />
@@ -21,8 +12,6 @@ const Root = () => {
         </h1>
 
         <Outlet />
-
-        <PromptBar />
       </div>
     </div>
   );

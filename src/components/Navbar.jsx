@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { conversationState, pastConversationsState } from "../store/atoms";
 
@@ -13,14 +13,38 @@ const Navbar = () => {
   );
   const [conversation, setConversation] = useRecoilState(conversationState);
 
+  const navigate = useNavigate();
+
   const clickHandler = () => {
     setTogglerNav(!togglerNav);
   };
 
   const handleNewChat = () => {
-    // const updatedPastConversations = [conversation, ...pastConversations];
-    setPastConversations([]);
+    if (conversation.length > 0) {
+      const updatedPastConversations = [conversation, ...pastConversations];
+
+      if (updatedPastConversations.length > 0) {
+        // Store the past conversations to local Storage
+        localStorage.setItem(
+          "pastConversations",
+          JSON.stringify(updatedPastConversations)
+        );
+
+        setPastConversations(updatedPastConversations);
+      }
+    }
+
     setConversation([]);
+  };
+
+  const handleClearAll = () => {
+    setPastConversations([]);
+
+    setConversation([]);
+
+    localStorage.removeItem("pastConversations");
+
+    navigate("/");
   };
 
   return (
@@ -58,7 +82,11 @@ const Navbar = () => {
           <Link
             className="flex justify-start bg-purple-200 p-2 rounded-lg w-[90%] font-bold text-[#414146]"
             to="/"
-            onClick={clickHandler}
+            onClick={() => {
+              handleNewChat();
+
+              setTogglerNav(!togglerNav);
+            }}
           >
             New Chat
           </Link>
@@ -88,17 +116,24 @@ const Navbar = () => {
             <p className=" text-xl ">New Chat</p>
           </Link>
 
-          <button onClick={handleNewChat}>
+          <Link to="/" onClick={handleNewChat}>
             <FaRegPenToSquare className=" cursor-pointer" />
-          </button>
+          </Link>
         </div>
 
-        <div className="w-full h-full bg-white flex flex-col justify-start items-center px-4 py-3">
+        <div className="w-full h-full bg-white flex flex-col justify-start items-center gap-5 px-4 py-3">
           <Link className="w-full" to="/conversations">
             <p className="h-[40px] bg-[#D7C7F4] text-[#414146] font-bold flex justify-center items-center rounded-[10px]">
               Past Conversations
             </p>
           </Link>
+
+          <button
+            className="w-full h-[40px] bg-red-400  text-[#ffffff] font-bold rounded-[10px]"
+            onClick={handleClearAll}
+          >
+            Clear All
+          </button>
         </div>
       </div>
     </Fragment>
