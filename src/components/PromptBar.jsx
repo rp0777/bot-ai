@@ -15,6 +15,10 @@ const PromptBar = () => {
     setInputQuestion(e.target.value);
   };
 
+  /**
+   * Handles form submission by validating user input, retrieving an appropriate response,
+   * and updating the conversation state with the new interaction.
+   */
   const handleSubmit = () => {
     if (!inputQuestion) {
       alert("Please add a prompt to continue!");
@@ -47,6 +51,10 @@ const PromptBar = () => {
     inputRef.current.focus();
   };
 
+  /**
+   * Handles saving the current conversation to past conversations and storing them in local storage.
+   * Clears the current conversation after saving.
+   */
   const handleSave = () => {
     if (conversation.length === 0) {
       alert("Please add a prompt to continue!");
@@ -70,24 +78,27 @@ const PromptBar = () => {
   };
 
   return (
-    <div className=" w-full h-10 mb-4 flex justify-between items-center gap-3 px-4">
+    <div className=" dark:bg-slate-500 w-full h-16 flex justify-between items-center gap-3 px-4 py-4">
+      {/* PROMPT INPUT */}
       <input
         ref={inputRef}
-        className=" w-full h-full rounded-[5px] border-[1px] border-[#00000073] outline-none px-4"
+        className=" dark:bg-slate-400 dark:border-slate-700 dark:text-slate-800 w-full h-full rounded-[5px] border-[1px] border-[#00000073] outline-none px-4"
         type="text"
         value={inputQuestion}
         onChange={handleInputChange}
       />
 
+      {/* ASK BUTTON */}
       <button
-        className="h-full text-base flex justify-center items-center p-3 bg-[#D7C7F4] rounded-[5px] outline-none"
+        className=" dark:bg-slate-700 dark:text-white h-full text-base flex justify-center items-center p-3 bg-[#D7C7F4] rounded-[5px] outline-none"
         onClick={handleSubmit}
       >
         Ask
       </button>
 
+      {/* SAVE BUTTON */}
       <button
-        className="h-full text-base flex justify-center items-center p-3 bg-[#D7C7F4] rounded-[5px] outline-none"
+        className=" dark:bg-slate-700 dark:text-white h-full text-base flex justify-center items-center p-3 bg-[#D7C7F4] rounded-[5px] outline-none"
         onClick={handleSave}
       >
         Save

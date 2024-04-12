@@ -19,6 +19,11 @@ const Navbar = () => {
     setTogglerNav(!togglerNav);
   };
 
+  /**
+   * Handles creating a new chat session.
+   * If there is an ongoing conversation, it moves it to past conversations
+   * and stores them in local storage. Then clears the current conversation.
+   */
   const handleNewChat = () => {
     if (conversation.length > 0) {
       const updatedPastConversations = [conversation, ...pastConversations];
@@ -37,6 +42,11 @@ const Navbar = () => {
     setConversation([]);
   };
 
+  /**
+   * Clears all past conversations and the current conversation.
+   * Removes past conversations from local storage.
+   * Navigates the user to the home page ("/").
+   */
   const handleClearAll = () => {
     setPastConversations([]);
 
@@ -49,38 +59,42 @@ const Navbar = () => {
 
   return (
     <Fragment>
-      {/* Mobile Design */}
+      {/* MOBILE VERSION */}
       <div className=" w-full h-[60px] p-3 flex justify-start items-center gap-4 md:hidden">
+        {/* HAMBURGER MENU BUTTON */}
         <button
-          className="text-[#9785BA] rounded-lg hover:bg-purple-200 p-2"
+          className=" dark:text-slate-700 text-[#9785BA] rounded-lg hover:bg-purple-200 p-2"
           onClick={clickHandler}
         >
           <FaBars />
         </button>
 
-        <h1 className="text-3xl text-[#9785BA]">Bot AI</h1>
+        {/* MAIN LOGO */}
+        <h1 className=" dark:text-slate-700 text-3xl text-[#9785BA]">Bot AI</h1>
       </div>
 
-      {/* When sideBar is Open */}
+      {/* WHEN SIDEBAR IS OPEN IN MOBILE */}
       {togglerNav && (
         <div
           className={
-            "absolute top-1 left-1 flex flex-col justify-start items-center gap-4 bg-slate-100 rounded-lg w-52 h-[100vh] z-10"
+            " dark:bg-slate-800 absolute top-1 left-1 flex flex-col justify-start items-center gap-4 bg-slate-100 rounded-lg w-52 h-[100vh] z-10"
           }
         >
+          {/* LOGO AND CLOSE BUTTON */}
           <div className=" w-full flex justify-evenly items-center gap-4 ml-4 mt-3 ">
             <h1 className="text-3xl text-[#9785BA]">Bot AI</h1>
 
             <button
-              className="text-[#9785BA] rounded-lg hover:bg-purple-200 p-2 text-2xl"
+              className=" dark:bg-slate-400 dark:text-slate-700 text-[#9785BA] rounded-lg p-2 text-2xl"
               onClick={clickHandler}
             >
               <IoMdClose />
             </button>
           </div>
 
+          {/* NEW CHAT BUTTON */}
           <Link
-            className="flex justify-start bg-purple-200 p-2 rounded-lg w-[90%] font-bold text-[#414146]"
+            className=" dark:bg-slate-400 dark:text-slate-700 flex justify-start bg-purple-200 p-2 rounded-lg w-[90%] font-bold text-[#414146]"
             to="/"
             onClick={() => {
               handleNewChat();
@@ -91,19 +105,29 @@ const Navbar = () => {
             New Chat
           </Link>
 
+          {/* PAST CONVERSATION BUTTON */}
           <Link
-            className="flex justify-start bg-purple-200 p-2 rounded-lg w-[90%] font-bold text-[#414146]"
+            className=" dark:bg-slate-400 dark:text-slate-700 flex justify-start bg-purple-200 p-2 rounded-lg w-[90%] font-bold text-[#414146]"
             to="/conversations"
             onClick={clickHandler}
           >
             Past Conversations
           </Link>
+
+          {/* CLEAR ALL BUTTON */}
+          <button
+            className="w-[90%] h-[40px] bg-red-400 text-start p-2  text-[#ffffff] font-bold rounded-[10px]"
+            onClick={handleClearAll}
+          >
+            Clear All
+          </button>
         </div>
       )}
 
-      {/* Desktop Design */}
-      <div className="hidden md:w-[250px] md:h-full md:bg-slate-100 md:flex md:flex-col justify-start items-start">
-        <div className=" w-full h-12 bg-[#D7C7F4] flex justify-evenly items-center">
+      {/* DESKTOP DESIGN */}
+      <div className=" hidden md:w-[250px] md:h-full md:bg-slate-100 md:flex md:flex-col justify-start items-start">
+        {/* LOGO, NEW CHAT HEADING AND ICON */}
+        <div className=" dark:bg-slate-700 dark:text-white w-full h-12 bg-[#D7C7F4] flex justify-evenly items-center">
           <Link to="/">
             <img
               className=" size-8"
@@ -121,13 +145,16 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="w-full h-full bg-white flex flex-col justify-start items-center gap-5 px-4 py-3">
+        {/* PAST CONVERSATION AND CLEAR BUTTONS */}
+        <div className=" dark:bg-slate-600 w-full h-full bg-white flex flex-col justify-start items-center gap-5 px-4 py-3">
+          {/* PAST CONVERSATION BUTTON */}
           <Link className="w-full" to="/conversations">
             <p className="h-[40px] bg-[#D7C7F4] text-[#414146] font-bold flex justify-center items-center rounded-[10px]">
               Past Conversations
             </p>
           </Link>
 
+          {/* CLEAR ALL BUTTON */}
           <button
             className="w-full h-[40px] bg-red-400  text-[#ffffff] font-bold rounded-[10px]"
             onClick={handleClearAll}

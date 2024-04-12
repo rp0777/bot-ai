@@ -8,6 +8,7 @@ import { IoMdClose } from "react-icons/io";
 import { conversationState } from "../store/atoms";
 import { useRecoilState } from "recoil";
 
+// Labels Array for Star Rating
 const labels = {
   1: "Very Poor",
   2: "Poor",
@@ -20,6 +21,7 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
 }
 
+// Format the date in "Month Date, Year" Format
 const dateFormat = (dateStr) => {
   const date = new Date(dateStr.split("T")[0]);
 
@@ -61,6 +63,10 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
     setRating(newValue);
   };
 
+  /**
+   * This useEffect hook updates the conversation when the rating changes.
+   * It updates the rating of the current chat in the conversation.
+   */
   useEffect(() => {
     const updateConversation = () => {
       const updatedChat = { ...chat, rating };
@@ -109,6 +115,9 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
 
   const handleLiked = () => setLiked(!liked);
 
+  /**
+   * Gets the current time in Indian Standard Time (IST) and formats it as "HH:MM (AM/PM)".
+   */
   const istTime = new Date().toLocaleString("en-US", {
     timeZone: "Asia/Kolkata",
   });
@@ -123,32 +132,36 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
     <div
       className={`${
         isReadOnly && "bg-[#b2a3cc]"
-      } w-[95%] px-4 py-3 bg-[#D7C7F421] flex justify-between items-start gap-5 rounded-[20px]`}
+      } w-[95%] px-4 py-3 dark:bg-slate-700 bg-[#D7C7F421] flex justify-between items-start gap-5 rounded-[20px]`}
       style={{ boxShadow: "-4px 4px 15px rgba(0, 0, 0, 0.15)" }}
     >
-      {/* Uer or Bot Avatar */}
+      {/* USER OR BOT AVATAR */}
       <img
         className=" size-16"
         src={isResponse ? "/logo.png" : "/user.png"}
         alt="user avatar"
       />
 
-      {/* Main Text Container */}
+      {/* MAIN CONVERSATION TEXT CONTAINER */}
       <div className="w-full flex flex-col justify-center items-start gap-2">
-        <h3 className=" font-bold">{isResponse ? "Bot AI" : "You"}</h3>
+        <h3 className=" dark:text-white font-bold">
+          {isResponse ? "Bot AI" : "You"}
+        </h3>
 
-        {/* User Prompt or Bot Response */}
-        <p>{isResponse ? chat.response : chat.question}</p>
+        {/* USER PROMPT OR BOT RESPONSE */}
+        <p className=" dark:text-slate-300">
+          {isResponse ? chat.response : chat.question}
+        </p>
 
-        <div className=" w-full flex justify-between items-center text-xs font-medium text-[#0706069e]">
-          {/* Time and Date */}
+        <div className=" dark:text-slate-400 w-full flex justify-between items-center text-xs font-medium text-[#0706069e]">
+          {/* TIME AND DATE */}
           <p>
             {isReadOnly
               ? `${dateFormat(chat.date)}, ${formattedTimeIST}`
               : formattedTimeIST}
           </p>
 
-          {/* Like and Dislike Buttons */}
+          {/* LIKE AND DISLIKE BUTTONS */}
           <div
             className={`${
               (!isResponse || isReadOnly) && "hidden"
@@ -164,10 +177,12 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
           </div>
         </div>
 
-        {/* Star Rating */}
+        {/* STAR RATING */}
         {(liked || (isResponse && isReadOnly && chat.rating !== 0)) && (
           <div className="flex flex-col justify-center items-start">
-            {!isReadOnly && <p>Provide the Ratings!</p>}
+            {!isReadOnly && (
+              <p className=" dark:text-slate-100">Provide the Ratings!</p>
+            )}
 
             <div className=" flex">
               <Rating
@@ -185,13 +200,13 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
                 readOnly={isReadOnly && "readOnly"}
               />
               {rating !== null && (
-                <Box sx={{ ml: 2 }}>
+                <Box className=" dark:text-slate-100" sx={{ ml: 2 }}>
                   {labels[hover !== -1 ? hover : rating]}
                 </Box>
               )}
 
               {isReadOnly && (
-                <p>
+                <p className=" dark:text-slate-100">
                   {labels[chat.rating]} ({chat.rating})
                 </p>
               )}
@@ -199,14 +214,14 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
           </div>
         )}
 
-        {/* User Feedback Form */}
+        {/* USER FEEDBACK MODAL */}
         <Modal
           isOpen={isOpen}
           contentLabel={"Provide Additional Feedback"}
-          className="w-[350px] h-[340px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-200 bg-opacity-85 rounded-lg p-30 flex flex-col justify-center items-center gap-6"
+          className=" dark:bg-slate-700 w-[350px] h-[340px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-200 bg-opacity-85 rounded-lg p-30 flex flex-col justify-center items-center gap-6"
         >
           <div className=" w-full px-4 flex justify-between items-center">
-            <div className=" flex justify-center items-center gap-4">
+            <div className=" dark:text-white flex justify-center items-center gap-4">
               <img className="" src="/bulb.png" alt="Bulb Image" />
 
               <p className=" font-semibold">Provide Additional Feedback</p>
@@ -221,7 +236,7 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
           </div>
 
           <textarea
-            className="w-[300px] h-[150px] p-4 overflow-auto"
+            className="w-[300px] h-[150px] p-4 overflow-auto rounded-xl"
             value={inputFeedback}
             onChange={handleInputChange}
           />
@@ -234,9 +249,9 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
           </button>
         </Modal>
 
-        {/* User Feedback rendered on Card */}
+        {/* USER FEEDBACK RENDERED ON CARD AFTER MODAL CLOSES*/}
         {(inputFeedback || (isResponse && isReadOnly && chat.feedback)) && (
-          <p>
+          <p className=" dark:text-white">
             <span className=" font-semibold"> Feedback : &nbsp; </span>
             {isReadOnly ? chat.feedback : inputFeedback}
           </p>

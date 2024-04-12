@@ -77,13 +77,16 @@ const Filters = () => {
   };
 
   return (
-    <div className=" w-full font-semibold flex justify-center items-center gap-7">
+    <div className=" dark:text-white w-full font-semibold flex justify-center items-center gap-7">
       <h2>Filters</h2>
 
       {/* Ratings Filter */}
       <FormControl sx={{ m: 1, width: 150 }}>
-        <InputLabel id="star-rating">Rating</InputLabel>
+        <InputLabel id="star-rating" className=" dark:text-white">
+          Rating
+        </InputLabel>
         <Select
+          className=" dark:text-white"
           labelId="star-rating"
           id="star-rating"
           multiple

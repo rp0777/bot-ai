@@ -10,9 +10,9 @@ import Filters from "../components/Filters";
 const ConvoCards = ({ conversation, index }) => (
   <div
     key={index}
-    className=" w-auto flex flex-col justify-center items-center gap-4 bg-[#207fb633] p-4 rounded-xl"
+    className=" dark:bg-slate-500 w-auto flex flex-col justify-center items-center gap-4 bg-[#207fb633] p-4 rounded-xl"
   >
-    <h3>{`Conversation : ${index + 1}`}</h3>
+    <h3 className=" dark:text-slate-1000">{`Conversation : ${index + 1}`}</h3>
 
     {conversation.map((chat) => (
       <Fragment key={chat.id}>
@@ -97,7 +97,7 @@ const Conversations = () => {
           {/* Today's Conversations */}
           {dateCategorizedConvos.today.length > 0 && (
             <Fragment>
-              <h2 className=" text-xl font-bold">
+              <h2 className=" dark:text-white text-xl font-bold">
                 {"Today's Conversation History : "}
               </h2>
 
@@ -112,7 +112,7 @@ const Conversations = () => {
           {/* This Month's Conversations */}
           {dateCategorizedConvos.thisMonth.length > 0 && (
             <Fragment>
-              <h2 className=" text-xl font-bold">
+              <h2 className=" dark:text-white text-xl font-bold">
                 {"This Month's Conversation History : "}
               </h2>
 
