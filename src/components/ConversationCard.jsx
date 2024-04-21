@@ -250,10 +250,11 @@ const ConversationCard = ({ chat, isResponse, isReadOnly }) => {
         </Modal>
 
         {/* USER FEEDBACK RENDERED ON CARD AFTER MODAL CLOSES*/}
-        {(inputFeedback || (isResponse && isReadOnly && chat.feedback)) && (
+        {((isResponse && chat.feedback) ||
+          (isResponse && isReadOnly && chat.feedback)) && (
           <p className=" dark:text-white">
             <span className=" font-semibold"> Feedback : &nbsp; </span>
-            {isReadOnly ? chat.feedback : inputFeedback}
+            {chat.feedback}
           </p>
         )}
       </div>
