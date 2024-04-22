@@ -1,10 +1,12 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { conversationState, pastConversationsState } from "../store/atoms";
+import { MdOutlineDarkMode } from "react-icons/md";
+import { BsSun } from "react-icons/bs";
 
 const Navbar = () => {
   const [togglerNav, setTogglerNav] = useState(false);
@@ -12,11 +14,45 @@ const Navbar = () => {
     pastConversationsState
   );
   const [conversation, setConversation] = useRecoilState(conversationState);
+  const [theme, setTheme] = useState("null");
 
   const navigate = useNavigate();
 
   const clickHandler = () => {
     setTogglerNav(!togglerNav);
+  };
+
+  /**
+   * Handles setting the theme based on the user's preferred color scheme.
+   * If the user prefers dark mode, sets the theme to "dark"; otherwise, sets it to "light".
+   */
+  useEffect(() => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  });
+
+  /**
+   * Updates the document's root element to reflect the current theme.
+   * If the theme is set to "dark", adds the "dark" class to the document's root element;
+   * otherwise, removes the "dark" class.
+   * Dependencies: theme - reflects changes in the theme.
+   */
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  /**
+   * Handles switching themes.
+   */
+  const handleThemeSwitch = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   /**
@@ -60,17 +96,30 @@ const Navbar = () => {
   return (
     <Fragment>
       {/* MOBILE VERSION */}
-      <div className=" w-full h-[60px] p-3 flex justify-start items-center gap-4 md:hidden">
-        {/* HAMBURGER MENU BUTTON */}
-        <button
-          className=" dark:text-slate-700 text-[#9785BA] rounded-lg hover:bg-purple-200 p-2"
-          onClick={clickHandler}
-        >
-          <FaBars />
-        </button>
+      <div className=" w-full h-[60px] p-3 flex justify-between items-center gap-4 md:hidden">
+        <div className=" flex justify-center items-center gap-4">
+          {/* HAMBURGER MENU BUTTON */}
+          <button
+            className=" dark:text-slate-700 text-[#9785BA] rounded-lg hover:bg-purple-200 p-2"
+            onClick={clickHandler}
+          >
+            <FaBars />
+          </button>
 
-        {/* MAIN LOGO */}
-        <h1 className=" dark:text-slate-700 text-3xl text-[#9785BA]">Bot AI</h1>
+          {/* MAIN LOGO */}
+          <h1 className=" dark:text-slate-700 text-3xl text-[#9785BA]">
+            Bot AI
+          </h1>
+        </div>
+
+        {/* DARK MODE TOGGLE BUTTON */}
+        <button className=" mr-2" onClick={handleThemeSwitch}>
+          {theme === "light" || theme === null ? (
+            <BsSun size={24} />
+          ) : (
+            <MdOutlineDarkMode size={24} />
+          )}
+        </button>
       </div>
 
       {/* WHEN SIDEBAR IS OPEN IN MOBILE */}
