@@ -32,7 +32,7 @@ const Navbar = () => {
     } else {
       setTheme("light");
     }
-  });
+  }, []);
 
   /**
    * Updates the document's root element to reflect the current theme.
