@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { conversationState, pastConversationsState } from "../store/atoms";
-import responseData from "../assets/responseData";
+// import responseData from "../assets/responseData";
+import axios from "axios";
+const apiKey = import.meta.env.VITE_API_KEY;
 
 const PromptBar = () => {
   const [pastConversations, setPastConversations] = useRecoilState(
@@ -11,31 +13,59 @@ const PromptBar = () => {
   const [inputQuestion, setInputQuestion] = useState("");
   const inputRef = useRef(null);
 
+  const apiUrl =
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+
   const handleInputChange = (e) => {
     setInputQuestion(e.target.value);
+  };
+
+  const generateAnswer = async (question) => {
+    const requestData = {
+      contents: [{ parts: [{ text: question }] }],
+    };
+
+    try {
+      const response = await axios.post(apiUrl + `?key=${apiKey}`, requestData);
+
+      const answer = response.data.candidates[0].content.parts[0].text;
+      return answer;
+    } catch (error) {
+      console.error("Error:", error.response.data.error);
+      throw error;
+    }
   };
 
   /**
    * Handles form submission by validating user input, retrieving an appropriate response,
    * and updating the conversation state with the new interaction.
    */
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // to check if input question is not empty before submitting for the answer
     if (!inputQuestion) {
       alert("Please add a prompt to continue!");
 
       return;
     }
 
-    let answer = responseData.filter(
-      (res) => res.question.toLowerCase() === inputQuestion.toLowerCase()
+    let answer = await generateAnswer(
+      inputQuestion +
+        " " +
+        "Provide the answer in a single paragraph and in 50 words max."
     );
 
-    if (answer.length === 0) {
-      answer =
-        "As an AI, I can't provide real-time information beyond my last training data, and I'm unable to predict future events. For the most accurate and up-to-date information about this topic, I recommend checking a reliable and current source..";
-    } else {
-      answer = answer[0].response;
-    }
+    // Retrieve answer from the response data
+    // let answer = responseData.filter(
+    //   (res) => res.question.toLowerCase() === inputQuestion.toLowerCase()
+    // );
+
+    // if response data does not have the answer then apply the default answer for not found questions in response data
+    // if (answer.length === 0) {
+    //   answer =
+    //     "As an AI, I can't provide real-time information beyond my last training data, and I'm unable to predict future events. For the most accurate and up-to-date information about this topic, I recommend checking a reliable and current source..";
+    // } else {
+    //   answer = answer[0].response;
+    // }
 
     const newConversation = {
       id: new Date().getTime(),
